@@ -35,7 +35,7 @@ Our goal is to create a user-friendly and efficient mobile app that caters to bo
 
 ### Screenshots
 
-![Screenshot](screenshots/login-screen.jpg)
+<img src="screenshots/login-screen.jpg" width=300/>
 
 ## How to Contribute
 
