@@ -1,15 +1,15 @@
-# League Companion App
+# 🔮 Vespera 🔮
 
-Welcome to the League Companion App repository! 
+Welcome to the Vespera App repository! 
 This mobile app is designed to be your go-to companion for all things League of Legends on the Android platform. 
 While the project is currently in the planning phase, we're excited about the potential features and functionalities that will enhance your League of Legends experience.
 
-## Project Overview
+## Project Overview ✨
 
 The League Companion App aims to provide users with valuable tools, information, and features to streamline their interaction with the League of Legends game. 
 Our goal is to create a user-friendly and efficient mobile app that caters to both casual and competitive players.
 
-## Planned Features
+## Planned Features ⚗️
 
 ### 1. Summoner Profile
 - View detailed summoner information.
@@ -27,7 +27,7 @@ Our goal is to create a user-friendly and efficient mobile app that caters to bo
 - Get personalized item and rune suggestions.
 - Stay informed about popular builds.
 
-## Development Stack
+## Development Stack 📚
 
 - The development will leverage Kotlin & Jetpack Compose for a modern and reactive UI.
 
@@ -35,7 +35,7 @@ Our goal is to create a user-friendly and efficient mobile app that caters to bo
 
 ### Screenshots
 
-![Screenshot](screenshots/login-screen.jpg)
+<img src="screenshots/login-screen.jpg" width=300/>
 
 ## How to Contribute
 
