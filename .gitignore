@@ -1,6 +1,14 @@
-# Gradle files
+# Gradle cache
 .gradle/
+
+# Generated file
 build/
+bin/
+gen/
+out/
+
+# Java class files
+*.class
 
 # Local configuration file (sdk path, etc)
 local.properties
