@@ -21,6 +21,7 @@ dependencies {
     compileOnly(libs.android.gradlePlugin)
     compileOnly(libs.android.tools.common)
     compileOnly(libs.kotlin.gradlePlugin)
+    compileOnly(libs.ksp.gradlePlugin)
 }
 
 tasks {
@@ -32,13 +33,29 @@ tasks {
 
 gradlePlugin {
     plugins {
+        register("androidApplicationCompose") {
+            id = "vespera.android.application.compose"
+            implementationClass = "AndroidApplicationComposeConventionPlugin"
+        }
         register("androidApplication") {
             id = "vespera.android.application"
             implementationClass = "AndroidApplicationConventionPlugin"
         }
+        register("androidLibraryCompose") {
+            id = "vespera.android.library.compose"
+            implementationClass = "AndroidLibraryComposeConventionPlugin"
+        }
         register("androidLibrary") {
             id = "vespera.android.library"
             implementationClass = "AndroidLibraryConventionPlugin"
+        }
+        register("androidHilt") {
+            id = "vespera.android.hilt"
+            implementationClass = "AndroidHiltConventionPlugin"
+        }
+        register("androidLint") {
+            id = "vespera.android.lint"
+            implementationClass = "AndroidLintConventionPlugin"
         }
         register("jvmLibrary") {
             id = "vespera.jvm.library"
