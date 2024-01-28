@@ -3,13 +3,12 @@ import com.absurddevs.vespera.VesperaBuildType
 plugins {
     alias(libs.plugins.vespera.android.application)
     alias(libs.plugins.vespera.android.application.compose)
+    alias(libs.plugins.vespera.android.application.flavors)
     alias(libs.plugins.vespera.android.hilt)
     alias(libs.plugins.baselineprofile)
 }
 
 android {
-    namespace = "com.absurddevs.app"
-
     defaultConfig {
         applicationId = "com.absurddevs.vespera"
         versionCode = 8
@@ -25,12 +24,13 @@ android {
         debug {
             applicationIdSuffix = VesperaBuildType.DEBUG.applicationIdSuffix
         }
-        release {
-            isMinifyEnabled = false
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
+
+        val release = getByName("release") {
+            isMinifyEnabled = true
+            applicationIdSuffix = VesperaBuildType.RELEASE.applicationIdSuffix
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+
+            baselineProfile.automaticGenerationDuringBuild = true
         }
     }
 
@@ -39,9 +39,14 @@ android {
             excludes.add("/META-INF/{AL2.0,LGPL2.1}")
         }
     }
+    namespace = "com.absurddevs.vespera"
 }
 
 dependencies {
+    implementation(projects.feature.home)
+
+    implementation(projects.core.designsystem)
+
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.core.splashscreen)
@@ -55,4 +60,8 @@ dependencies {
     testImplementation(libs.hilt.android.testing)
 
     androidTestImplementation(libs.hilt.android.testing)
+}
+
+baselineProfile {
+    automaticGenerationDuringBuild = false
 }

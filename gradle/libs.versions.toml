@@ -29,6 +29,11 @@ appcompat-v7 = "28.0.0"
 androidx-test-ext-junit = "1.1.5"
 androidx-test-espresso-espresso-core = "3.5.1"
 material = "1.11.0"
+kotlin1910 = "1.9.10"
+junit-junit = "4.13.2"
+androidx-test-ext-junit115 = "1.1.5"
+androidx-test-espresso-espresso-core351 = "3.5.1"
+com-google-android-material-material = "1.11.0"
 
 [libraries]
 accompanist-permissions = { group = "com.google.accompanist", name = "accompanist-permissions", version.ref = "accompanist" }
@@ -76,6 +81,10 @@ android-gradlePlugin = { group = "com.android.tools.build", name = "gradle", ver
 android-tools-common = { group = "com.android.tools", name = "common", version.ref = "androidTools" }
 kotlin-gradlePlugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
 ksp-gradlePlugin = { group = "com.google.devtools.ksp", name = "com.google.devtools.ksp.gradle.plugin", version.ref = "ksp" }
+junit = { group = "junit", name = "junit", version.ref = "junit-junit" }
+androidx-test-ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "androidx-test-ext-junit115" }
+espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "androidx-test-espresso-espresso-core351" }
+material = { group = "com.google.android.material", name = "material", version.ref = "com-google-android-material-material" }
 
 
 [plugins]
@@ -92,8 +101,11 @@ ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 # Plugins defined by this project
 vespera-android-application = { id = "vespera.android.application", version = "unspecified" }
 vespera-android-application-compose = { id = "vespera.android.application.compose", version = "unspecified" }
+vespera-android-application-flavors = { id = "vespera.android.application.flavors", version = "unspecified"}
+vespera-android-feature = { id = "vespera.android.feature", version = "unspecified"}
 vespera-android-hilt = { id = "vespera.android.hilt", version = "unspecified" }
 vespera-android-library = { id = "vespera.android.library", version = "unspecified" }
 vespera-android-library-compose = { id = "vespera.android.library.compose", version = "unspecified" }
 vespera-android-lint = { id = "vespera.android.lint", version = "unspecified" }
 vespera-jvm-library = { id = "vespera.jvm.library", version = "unspecified" }
+kotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin1910" }
