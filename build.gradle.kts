@@ -5,8 +5,6 @@ buildscript {
         google()
         mavenCentral()
 
-        // Android Build server
-        maven { url = uri("../vespera-prebuilts/m2repository") }
     }
     dependencies {
 
@@ -24,4 +22,5 @@ plugins {
     alias(libs.plugins.dependencyGuard) apply false
     alias(libs.plugins.hilt) apply false
     alias(libs.plugins.ksp) apply false
+    alias(libs.plugins.kotlinAndroid) apply false
 }

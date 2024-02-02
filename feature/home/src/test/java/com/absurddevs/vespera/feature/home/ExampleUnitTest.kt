@@ -1,4 +1,4 @@
-package com.absurddevs.app
+package com.absurddevs.vespera.feature.home
 
 import org.junit.Test
 
