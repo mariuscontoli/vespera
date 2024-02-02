@@ -172,8 +172,8 @@ val DarkAndroidBackgroundTheme = BackgroundTheme(color = Color.Black)
 /**
  * Vespera theme.
  *
- * @param darkTheme Wether the theme should use a dark color scheme (follow system by default).
- * @param androidTheme Wether the theme should use Android theme color scheme instead of the
+ * @param darkTheme Whether the theme should use a dark color scheme (follow system by default).
+ * @param androidTheme Whether the theme should use Android theme color scheme instead of the
  *        default theme.
  * @param disableDynamicTheming If `true`, disables the use of dynamic theming, even when it is supported.
  * This parameter has no effect if [androidTheme] is `true`.
@@ -183,7 +183,7 @@ val DarkAndroidBackgroundTheme = BackgroundTheme(color = Color.Black)
 fun VesperaTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     androidTheme: Boolean = false,
-    disableDynamicTheming: Boolean = true,
+    disableDynamicTheming: Boolean = false,
     content: @Composable () -> Unit
 ) {
     // Color scheme

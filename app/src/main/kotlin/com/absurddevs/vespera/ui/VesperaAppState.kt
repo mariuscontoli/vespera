@@ -13,7 +13,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
 import com.absurddevs.vespera.feature.home.navigation.HOME_ROUTE
-import com.absurddevs.vespera.feature.home.navigation.navigateToHome
+import com.absurddevs.vespera.feature.home.navigation.navigateToHomeGraph
 import com.absurddevs.vespera.navigation.TopLevelDestination
 import com.absurddevs.vespera.navigation.TopLevelDestination.*
 import kotlinx.coroutines.CoroutineScope
@@ -57,6 +57,9 @@ class VesperaAppState(
     val shouldShowBottomBar: Boolean
         get() = windowSizeClass.widthSizeClass == WindowWidthSizeClass.Compact
 
+    val shouldShowNavRail: Boolean
+        get() = !shouldShowBottomBar
+
 
     val topLevelDestinations: List<TopLevelDestination> = TopLevelDestination.entries
 
@@ -77,7 +80,7 @@ class VesperaAppState(
         }
 
         when (topLevelDestination) {
-            HOME -> navController.navigateToHome(topLevelNavOptions)
+            HOME -> navController.navigateToHomeGraph(topLevelNavOptions)
         }
     }
 }
