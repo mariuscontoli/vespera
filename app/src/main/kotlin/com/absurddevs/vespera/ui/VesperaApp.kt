@@ -54,7 +54,7 @@ fun VesperaAdaptiveApp(
 
     VesperaBackground {
         NavigationSuiteScaffold(
-            layoutType = appState.currentLayoutType,
+            layoutType = appState.navigationSuiteType,
             navigationSuiteItems = {
                 vesperaNavigationSuiteItems(
                     currentTopLevelDestination = topLevelDestination,

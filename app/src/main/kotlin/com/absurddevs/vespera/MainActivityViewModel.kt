@@ -36,7 +36,7 @@ class MainActivityViewModel @Inject constructor(
             themeBrand = ThemeBrand.DEFAULT,
             darkThemeConfig = DarkThemeConfig.FOLLOW_SYSTEM,
             useDynamicColor = true,
-            useAdaptiveLayout = false
+            useAdaptiveLayout = true
         ))
     }
 
