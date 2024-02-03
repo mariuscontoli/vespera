@@ -1,5 +1,10 @@
 package com.absurddevs.vespera.ui
 
+import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
+import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
+import androidx.compose.material3.adaptive.navigation.suite.ExperimentalMaterial3AdaptiveNavigationSuiteApi
+import androidx.compose.material3.adaptive.navigation.suite.NavigationSuiteScaffoldDefaults
+import androidx.compose.material3.adaptive.navigation.suite.NavigationSuiteType
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
@@ -15,10 +20,13 @@ import androidx.navigation.navOptions
 import com.absurddevs.vespera.feature.home.navigation.HOME_ROUTE
 import com.absurddevs.vespera.feature.home.navigation.navigateToHomeGraph
 import com.absurddevs.vespera.navigation.TopLevelDestination
-import com.absurddevs.vespera.navigation.TopLevelDestination.*
+import com.absurddevs.vespera.navigation.TopLevelDestination.HOME
 import kotlinx.coroutines.CoroutineScope
 
 
+@OptIn(ExperimentalMaterial3AdaptiveNavigationSuiteApi::class,
+    ExperimentalMaterial3AdaptiveApi::class
+)
 @Composable
 fun rememberNiaAppState(
     windowSizeClass: WindowSizeClass,
@@ -29,7 +37,8 @@ fun rememberNiaAppState(
     return remember(
         navController,
         coroutineScope,
-        windowSizeClass) {
+        windowSizeClass
+    ) {
         VesperaAppState(
             navController,
             coroutineScope,
@@ -38,11 +47,12 @@ fun rememberNiaAppState(
     }
 }
 
+@OptIn(ExperimentalMaterial3AdaptiveNavigationSuiteApi::class)
 @Stable
 class VesperaAppState(
     val navController: NavHostController,
     val coroutineScope: CoroutineScope,
-    val windowSizeClass: WindowSizeClass
+    val windowSizeClass: WindowSizeClass,
 ) {
     val currentDestination: NavDestination?
         @Composable get() = navController
@@ -62,6 +72,17 @@ class VesperaAppState(
 
 
     val topLevelDestinations: List<TopLevelDestination> = TopLevelDestination.entries
+
+    /**
+     * Stores the current layout type, used by navigation suite.
+     */
+    @OptIn(ExperimentalMaterial3AdaptiveApi::class)
+    val currentLayoutType: NavigationSuiteType
+        @Composable get() {
+            return NavigationSuiteScaffoldDefaults.calculateFromAdaptiveInfo(
+                currentWindowAdaptiveInfo()
+            )
+        }
 
     /**
      * UI logic for navigating to a top level destination in the app.

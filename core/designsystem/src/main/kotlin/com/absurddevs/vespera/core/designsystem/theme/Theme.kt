@@ -219,3 +219,8 @@ fun VesperaTheme(
 
 @ChecksSdkIntAtLeast(api = Build.VERSION_CODES.S)
 fun supportsDynamicTheming() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
+
+enum class ThemeBrand {
+    DEFAULT,
+    ANDROID,
+}

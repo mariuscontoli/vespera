@@ -1,7 +1,6 @@
 package com.absurddevs.vespera.navigation
 
 import androidx.compose.ui.graphics.vector.ImageVector
-import com.absurddevs.vespera.R
 import com.absurddevs.vespera.core.designsystem.icon.VesperaIcons
 import com.absurddevs.vespera.feature.home.R as homeR
 
@@ -13,13 +12,15 @@ import com.absurddevs.vespera.feature.home.R as homeR
 enum class TopLevelDestination(
     val selectedIcon: ImageVector,
     val unselectedIcon: ImageVector,
+    val navigationIcon: ImageVector?,
     val iconTextId: Int,
     val titleTextId: Int
 ) {
     HOME(
         selectedIcon = VesperaIcons.House,
         unselectedIcon = VesperaIcons.HouseBorder,
+        navigationIcon = null,
         iconTextId = homeR.string.feature_home_title,
-        titleTextId = R.string.app_name
+        titleTextId = homeR.string.feature_home_title
     )
 }

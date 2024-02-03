@@ -7,6 +7,8 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
+import androidx.compose.material3.adaptive.navigation.suite.ExperimentalMaterial3AdaptiveNavigationSuiteApi
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.Composable
@@ -19,8 +21,11 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import com.absurddevs.vespera.MainActivityUiState.*
+import com.absurddevs.vespera.MainActivityUiState.Loading
+import com.absurddevs.vespera.MainActivityUiState.Success
+import com.absurddevs.vespera.core.designsystem.theme.ThemeBrand
 import com.absurddevs.vespera.core.designsystem.theme.VesperaTheme
+import com.absurddevs.vespera.ui.VesperaAdaptiveApp
 import com.absurddevs.vespera.ui.VesperaApp
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
@@ -32,7 +37,10 @@ class MainActivity : ComponentActivity() {
 
     val viewModel: MainActivityViewModel by viewModels()
 
-    @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
+    @OptIn(ExperimentalMaterial3WindowSizeClassApi::class,
+        ExperimentalMaterial3AdaptiveApi::class,
+        ExperimentalMaterial3AdaptiveNavigationSuiteApi::class
+    )
     override fun onCreate(savedInstanceState: Bundle?) {
         val splashScreen = installSplashScreen()
         super.onCreate(savedInstanceState)
@@ -76,9 +84,16 @@ class MainActivity : ComponentActivity() {
             CompositionLocalProvider {
                 VesperaTheme(
                     darkTheme = darkTheme,
+                    androidTheme = shouldUseAndroidTheme(uiState),
                     disableDynamicTheming = shouldDisableDynamicTheming(uiState)
                 ) {
-                    VesperaApp(windowSizeClass = calculateWindowSizeClass(activity = this))
+                    val useAdaptiveLayout = shouldUseAdaptiveLayout(uiState = uiState)
+
+                    if (useAdaptiveLayout) {
+                        VesperaAdaptiveApp(windowSizeClass = calculateWindowSizeClass(activity = this))
+                    } else {
+                        VesperaApp(windowSizeClass = calculateWindowSizeClass(activity = this))
+                    }
                 }
             }
         }
@@ -90,6 +105,25 @@ class MainActivity : ComponentActivity() {
 
     override fun onPause() {
         super.onPause()
+    }
+}
+
+@Composable
+private fun shouldUseAdaptiveLayout(
+    uiState: MainActivityUiState
+): Boolean = when (uiState) {
+    Loading -> false
+    is Success -> uiState.data.useAdaptiveLayout
+}
+
+@Composable
+private fun shouldUseAndroidTheme(
+    uiState: MainActivityUiState
+): Boolean = when (uiState) {
+    Loading -> false
+    is Success -> when (uiState.data.themeBrand) {
+        ThemeBrand.DEFAULT -> false
+        ThemeBrand.ANDROID -> true
     }
 }
 
