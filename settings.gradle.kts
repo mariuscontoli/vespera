@@ -23,3 +23,6 @@ include(":core:designsystem")
 
 include(":feature:home")
 include(":lint")
+include(":core:ui")
+include(":core:datastore")
+include(":core:data")

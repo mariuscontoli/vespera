@@ -7,6 +7,9 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
+import androidx.compose.foundation.layout.systemBars
 import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
 import androidx.compose.material3.adaptive.navigation.suite.ExperimentalMaterial3AdaptiveNavigationSuiteApi
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
@@ -16,20 +19,32 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.window.layout.FoldingFeature
+import androidx.window.layout.WindowInfoTracker
 import com.absurddevs.vespera.MainActivityUiState.Loading
 import com.absurddevs.vespera.MainActivityUiState.Success
 import com.absurddevs.vespera.core.designsystem.theme.ThemeBrand
 import com.absurddevs.vespera.core.designsystem.theme.VesperaTheme
+import com.absurddevs.vespera.core.ui.BetterInsets
+import com.absurddevs.vespera.core.ui.DevicePosture
+import com.absurddevs.vespera.core.ui.LocalBetterInsets
+import com.absurddevs.vespera.core.ui.isBookPosture
+import com.absurddevs.vespera.core.ui.isSeparating
 import com.absurddevs.vespera.ui.VesperaAdaptiveApp
 import com.absurddevs.vespera.ui.VesperaApp
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -63,6 +78,25 @@ class MainActivity : ComponentActivity() {
         }
         
         enableEdgeToEdge()
+
+        val devicePostureFlow = WindowInfoTracker.getOrCreate(this).windowLayoutInfo(this)
+            .flowWithLifecycle(this.lifecycle)
+            .map { layoutInfo ->
+                val foldingFeature =
+                    layoutInfo.displayFeatures.filterIsInstance<FoldingFeature>().firstOrNull()
+                when {
+                    isBookPosture(foldingFeature) ->
+                        DevicePosture.BookPosture(foldingFeature.bounds)
+                    isSeparating(foldingFeature) ->
+                        DevicePosture.Separating(foldingFeature.bounds, foldingFeature.orientation)
+                    else -> DevicePosture.NormalPosture
+                }
+            }
+            .stateIn(
+                scope = lifecycleScope,
+                started = SharingStarted.Eagerly,
+                initialValue = DevicePosture.NormalPosture
+            )
         
         setContent {
             val darkTheme = shouldUseDarkTheme(uiState)
@@ -81,18 +115,32 @@ class MainActivity : ComponentActivity() {
                 onDispose { }
             }
 
-            CompositionLocalProvider {
-                VesperaTheme(
-                    darkTheme = darkTheme,
-                    androidTheme = shouldUseAndroidTheme(uiState),
-                    disableDynamicTheming = shouldDisableDynamicTheming(uiState)
+            // System Bars handling
+            val systemBarsPadding = WindowInsets.systemBars.asPaddingValues()
+            val betterInsets = remember {
+                BetterInsets(
+                    statusBarHeight = systemBarsPadding.calculateTopPadding(),
+                    navigationBarHeight = systemBarsPadding.calculateBottomPadding()
+                )
+            }
+
+            val windowSizeClass = calculateWindowSizeClass(activity = this)
+            // We might want to inject that later
+            val devicePosture = devicePostureFlow.value
+
+
+            VesperaTheme {
+                CompositionLocalProvider(
+                    values = arrayOf(
+                        LocalBetterInsets provides betterInsets
+                    )
                 ) {
                     val useAdaptiveLayout = shouldUseAdaptiveLayout(uiState = uiState)
 
                     if (useAdaptiveLayout) {
-                        VesperaAdaptiveApp(windowSizeClass = calculateWindowSizeClass(activity = this))
+                        VesperaAdaptiveApp(windowSizeClass = windowSizeClass)
                     } else {
-                        VesperaApp(windowSizeClass = calculateWindowSizeClass(activity = this))
+                        VesperaApp(windowSizeClass = windowSizeClass)
                     }
                 }
             }
@@ -126,18 +174,6 @@ private fun shouldUseAndroidTheme(
         ThemeBrand.ANDROID -> true
     }
 }
-
-/**
- * Returns `true` if the dynamic color is disabled, as a function of the [uiState].
- */
-@Composable
-private fun shouldDisableDynamicTheming(
-    uiState: MainActivityUiState,
-): Boolean = when (uiState) {
-    Loading -> false
-    is Success -> !uiState.data.useDynamicColor
-}
-
 
 /**
  * Returns `true` if dark theme should be used, as a function of the [uiState] and the

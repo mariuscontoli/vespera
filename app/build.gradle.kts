@@ -45,7 +45,9 @@ android {
 dependencies {
     implementation(projects.feature.home)
 
+    implementation(projects.core.ui)
     implementation(projects.core.designsystem)
+    implementation(projects.core.data)
 
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.core.ktx)
@@ -53,6 +55,7 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtimeCompose)
     implementation(libs.androidx.compose.material3.windowSizeClass)
     implementation(libs.androidx.navigation.compose)
+    implementation(libs.androidx.window)
     implementation(libs.kotlinx.coroutines.guava)
 
     kspTest(libs.hilt.compiler)

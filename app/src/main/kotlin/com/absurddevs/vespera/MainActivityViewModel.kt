@@ -23,7 +23,6 @@ enum class DarkThemeConfig {
 data class CustomData(
     val themeBrand: ThemeBrand,
     val darkThemeConfig: DarkThemeConfig,
-    val useDynamicColor: Boolean,
     val useAdaptiveLayout: Boolean
 )
 
@@ -35,7 +34,6 @@ class MainActivityViewModel @Inject constructor(
         emit(CustomData(
             themeBrand = ThemeBrand.DEFAULT,
             darkThemeConfig = DarkThemeConfig.FOLLOW_SYSTEM,
-            useDynamicColor = true,
             useAdaptiveLayout = true
         ))
     }
