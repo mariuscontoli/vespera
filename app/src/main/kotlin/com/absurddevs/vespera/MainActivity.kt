@@ -127,7 +127,6 @@ class MainActivity : ComponentActivity() {
             }
 
             val windowSizeClass = calculateWindowSizeClass(activity = this)
-            // We might want to inject that later
             val devicePosture = devicePostureFlow.collectAsState().value
 
             val appState = rememberVesperaAppState(
@@ -146,17 +145,11 @@ class MainActivity : ComponentActivity() {
                         engine = appState.navHostEngine,
                         navController = appState.navController,
                         dependenciesContainerBuilder = {
-                            dependency(devicePosture)
+                            dependency(appState.navigationSuiteType)
                             dependency(appState.windowSizeClass)
+                            dependency(devicePosture)
                         }
                     )
-//                    val useAdaptiveLayout = shouldUseAdaptiveLayout(uiState = uiState)
-//
-//                    if (useAdaptiveLayout) {
-//                        VesperaAdaptiveApp(windowSizeClass = windowSizeClass)
-//                    } else {
-//                        VesperaApp(windowSizeClass = windowSizeClass)
-//                    }
                 }
             }
         }

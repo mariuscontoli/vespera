@@ -1,7 +1,9 @@
 package com.absurddevs.vespera.navigation
 
 import com.ramcosta.composedestinations.annotation.NavGraph
+import com.ramcosta.composedestinations.annotation.RootNavGraph
 
+@RootNavGraph(start = false)
 @NavGraph
 annotation class MenuNavGraph(
     val start: Boolean = false

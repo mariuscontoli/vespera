@@ -43,12 +43,12 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 @Destination
 @HomeNavGraph(start = true)
 @Composable
-fun HomePage(
+fun HomeScreen(
     modifier: Modifier = Modifier,
     navigator: DestinationsNavigator,
     mainNavController: NavController,
-    windowSize: WindowSizeClass,
     listState: LazyListState,
+    windowSize: WindowSizeClass,
 ) {
     BoxWithConstraints() {
         val savedMaxWidth by remember {

@@ -11,9 +11,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
 import com.absurddevs.vespera.appCurrentDestinationAsState
+import com.absurddevs.vespera.navigation.TopLevelDestination
 
 @Composable
 fun MenuNavigationBar(
+    items: List<TopLevelDestination>,
     modifier: Modifier = Modifier,
     navController: NavController
 ) {
@@ -21,7 +23,7 @@ fun MenuNavigationBar(
         modifier = modifier,
         containerColor = MaterialTheme.colorScheme.surface
     ) {
-        TopLevelDestination.entries.forEach { destination ->
+        items.forEach { destination ->
             val selected =
                 navController.appCurrentDestinationAsState().value in destination.graph.destinations
 
