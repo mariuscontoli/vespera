@@ -42,9 +42,12 @@ android {
     namespace = "com.absurddevs.vespera"
 }
 
-dependencies {
-    implementation(projects.feature.home)
+// Will propagate the navigation graphs as a whole through the app as com.absurddevs.vespera dependency
+ksp {
+    arg("compose-destinations.codeGenPackageName", "com.absurddevs.vespera")
+}
 
+dependencies {
     implementation(projects.core.ui)
     implementation(projects.core.designsystem)
     implementation(projects.core.data)
@@ -53,10 +56,15 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.core.splashscreen)
     implementation(libs.androidx.lifecycle.runtimeCompose)
+    implementation(libs.androidx.compose.animation)
+    implementation(libs.androidx.compose.animation.core)
     implementation(libs.androidx.compose.material3.windowSizeClass)
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.window)
     implementation(libs.kotlinx.coroutines.guava)
+
+    implementation(libs.compose.destinations.animations.core)
+    ksp(libs.compose.destinations.ksp)
 
     kspTest(libs.hilt.compiler)
 

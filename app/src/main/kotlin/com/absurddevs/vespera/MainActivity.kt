@@ -17,6 +17,7 @@ import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -37,8 +38,9 @@ import com.absurddevs.vespera.core.ui.DevicePosture
 import com.absurddevs.vespera.core.ui.LocalBetterInsets
 import com.absurddevs.vespera.core.ui.isBookPosture
 import com.absurddevs.vespera.core.ui.isSeparating
-import com.absurddevs.vespera.ui.VesperaAdaptiveApp
-import com.absurddevs.vespera.ui.VesperaApp
+import com.absurddevs.vespera.ui.rememberVesperaAppState
+import com.ramcosta.composedestinations.DestinationsNavHost
+import com.ramcosta.composedestinations.navigation.dependency
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.collect
@@ -126,8 +128,12 @@ class MainActivity : ComponentActivity() {
 
             val windowSizeClass = calculateWindowSizeClass(activity = this)
             // We might want to inject that later
-            val devicePosture = devicePostureFlow.value
+            val devicePosture = devicePostureFlow.collectAsState().value
 
+            val appState = rememberVesperaAppState(
+                defaultNavGraph = NavGraphs.home,
+                windowSizeClass = windowSizeClass
+            )
 
             VesperaTheme {
                 CompositionLocalProvider(
@@ -135,13 +141,22 @@ class MainActivity : ComponentActivity() {
                         LocalBetterInsets provides betterInsets
                     )
                 ) {
-                    val useAdaptiveLayout = shouldUseAdaptiveLayout(uiState = uiState)
-
-                    if (useAdaptiveLayout) {
-                        VesperaAdaptiveApp(windowSizeClass = windowSizeClass)
-                    } else {
-                        VesperaApp(windowSizeClass = windowSizeClass)
-                    }
+                    DestinationsNavHost(
+                        navGraph = NavGraphs.root,
+                        engine = appState.navHostEngine,
+                        navController = appState.navController,
+                        dependenciesContainerBuilder = {
+                            dependency(devicePosture)
+                            dependency(appState.windowSizeClass)
+                        }
+                    )
+//                    val useAdaptiveLayout = shouldUseAdaptiveLayout(uiState = uiState)
+//
+//                    if (useAdaptiveLayout) {
+//                        VesperaAdaptiveApp(windowSizeClass = windowSizeClass)
+//                    } else {
+//                        VesperaApp(windowSizeClass = windowSizeClass)
+//                    }
                 }
             }
         }

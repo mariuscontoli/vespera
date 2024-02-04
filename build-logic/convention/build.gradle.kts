@@ -49,10 +49,6 @@ gradlePlugin {
             id = "vespera.android.library"
             implementationClass = "AndroidLibraryConventionPlugin"
         }
-        register("androidFeature") {
-            id = "vespera.android.feature"
-            implementationClass = "AndroidFeatureConventionPlugin"
-        }
         register("androidHilt") {
             id = "vespera.android.hilt"
             implementationClass = "AndroidHiltConventionPlugin"

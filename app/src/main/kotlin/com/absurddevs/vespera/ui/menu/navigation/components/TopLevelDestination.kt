@@ -1,8 +1,12 @@
-package com.absurddevs.vespera.navigation
+package com.absurddevs.vespera.ui.menu.navigation.components
 
+import androidx.annotation.StringRes
 import androidx.compose.ui.graphics.vector.ImageVector
+import com.absurddevs.vespera.NavGraph
+import com.absurddevs.vespera.NavGraphs
+import com.absurddevs.vespera.R
 import com.absurddevs.vespera.core.designsystem.icon.VesperaIcons
-import com.absurddevs.vespera.feature.home.R as homeR
+
 
 /**
  * Type for the top level destination in the app. Each of these destinations can contain one
@@ -10,17 +14,15 @@ import com.absurddevs.vespera.feature.home.R as homeR
  * a single destination will be handled directly in composables.
  */
 enum class TopLevelDestination(
+    val graph: NavGraph,
     val selectedIcon: ImageVector,
     val unselectedIcon: ImageVector,
-    val navigationIcon: ImageVector?,
-    val iconTextId: Int,
-    val titleTextId: Int
+    @StringRes val labelResId: Int
 ) {
     HOME(
+        graph = NavGraphs.home,
         selectedIcon = VesperaIcons.House,
         unselectedIcon = VesperaIcons.HouseBorder,
-        navigationIcon = null,
-        iconTextId = homeR.string.feature_home_title,
-        titleTextId = homeR.string.feature_home_title
+        labelResId = R.string.destination_home
     )
 }

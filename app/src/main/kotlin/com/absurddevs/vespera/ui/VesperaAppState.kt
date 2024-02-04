@@ -1,5 +1,6 @@
 package com.absurddevs.vespera.ui
 
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
 import androidx.compose.material3.adaptive.WindowAdaptiveInfo
 import androidx.compose.material3.adaptive.calculatePosture
@@ -9,44 +10,51 @@ import androidx.compose.material3.adaptive.navigation.suite.ExperimentalMaterial
 import androidx.compose.material3.adaptive.navigation.suite.NavigationSuiteScaffoldDefaults
 import androidx.compose.material3.adaptive.navigation.suite.NavigationSuiteType
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
-import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.navigation.NavDestination
-import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.compose.ui.Alignment
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navOptions
-import com.absurddevs.vespera.feature.home.navigation.HOME_ROUTE
-import com.absurddevs.vespera.feature.home.navigation.navigateToHomeGraph
-import com.absurddevs.vespera.navigation.TopLevelDestination
-import com.absurddevs.vespera.navigation.TopLevelDestination.HOME
+import com.absurddevs.vespera.NavGraph
+import com.absurddevs.vespera.navigation.VesperaNavGraphDefaults
 import com.absurddevs.vespera.navigation.VesperaNavigationSuiteDefaults
+import com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi
+import com.ramcosta.composedestinations.animations.rememberAnimatedNavHostEngine
+import com.ramcosta.composedestinations.spec.NavHostEngine
 import kotlinx.coroutines.CoroutineScope
 
 
-@OptIn(ExperimentalMaterial3AdaptiveNavigationSuiteApi::class,
-    ExperimentalMaterial3AdaptiveApi::class
+@OptIn(ExperimentalMaterialNavigationApi::class,
+    ExperimentalAnimationApi::class
 )
 @Composable
-fun rememberNiaAppState(
+fun rememberVesperaAppState(
     windowSizeClass: WindowSizeClass,
+    defaultNavGraph: NavGraph,
     coroutineScope: CoroutineScope = rememberCoroutineScope(),
     navController: NavHostController = rememberNavController(),
+    navHostEngine: NavHostEngine = rememberAnimatedNavHostEngine(
+        navHostContentAlignment = Alignment.TopCenter,
+        rootDefaultAnimations = VesperaNavGraphDefaults.Animations.rootNavGraphDefaultAnimations(),
+        defaultAnimationsForNestedNavGraph = mapOf(
+            defaultNavGraph to VesperaNavGraphDefaults.Animations.nestedNavGraphDefaultAnimations()
+        )
+    )
 ): VesperaAppState {
 
     return remember(
         navController,
         coroutineScope,
-        windowSizeClass
+        windowSizeClass,
+        navHostEngine
     ) {
         VesperaAppState(
             navController,
             coroutineScope,
-            windowSizeClass
+            windowSizeClass,
+            navHostEngine
         )
     }
 }
@@ -57,26 +65,8 @@ class VesperaAppState(
     val navController: NavHostController,
     val coroutineScope: CoroutineScope,
     val windowSizeClass: WindowSizeClass,
+    val navHostEngine: NavHostEngine
 ) {
-    val currentDestination: NavDestination?
-        @Composable get() = navController
-            .currentBackStackEntryAsState().value?.destination
-
-    val currentTopLevelDestination: TopLevelDestination?
-        @Composable get() = when (currentDestination?.route) {
-            HOME_ROUTE -> HOME
-            else -> null
-        }
-
-    val shouldShowBottomBar: Boolean
-        get() = windowSizeClass.widthSizeClass == WindowWidthSizeClass.Compact
-
-    val shouldShowNavRail: Boolean
-        get() = !shouldShowBottomBar
-
-
-    val topLevelDestinations: List<TopLevelDestination> = TopLevelDestination.entries
-
     /**
      * Stores the current layout type.
      *
@@ -110,25 +100,4 @@ class VesperaAppState(
 
             return VesperaNavigationSuiteDefaults.calculateFromAdaptiveInfo(adaptiveInfo)
         }
-
-    /**
-     * UI logic for navigating to a top level destination in the app.
-     *
-     * @param topLevelDestination: The destination the app needs to navigate to.
-     */
-    fun navigateToTopLevelDestination(topLevelDestination: TopLevelDestination) {
-        val topLevelNavOptions = navOptions {
-            popUpTo(navController.graph.findStartDestination().id) {
-                saveState = true
-            }
-
-            launchSingleTop = true
-
-            restoreState = true
-        }
-
-        when (topLevelDestination) {
-            HOME -> navController.navigateToHomeGraph(topLevelNavOptions)
-        }
-    }
 }
