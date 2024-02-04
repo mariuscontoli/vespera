@@ -1,52 +1,50 @@
-# 🔮 Vespera 🔮
+🔮 Vespera app 🔮
+==================
 
-Welcome to the Vespera App repository! 
-This mobile app is designed to be your go-to companion for all things League of Legends on the Android platform. 
-While the project is currently in the planning phase, we're excited about the potential features and functionalities that will enhance your League of Legends experience.
+Welcome to the Vespera app repository! It is a **work in progress** 🚧.
 
-## Project Overview ✨
+To be honest, Vespera aspire to be either a 🔮 League Companion or a 💤 sleep companion. Choice is hard.
+# Project Overview ✨
 
-The League Companion App aims to provide users with valuable tools, information, and features to streamline their interaction with the League of Legends game. 
-Our goal is to create a user-friendly and efficient mobile app that caters to both casual and competitive players.
+Vespera is a cutting-edge Android application built with Kotlin & Jetpack Compose, adhering to the latest Material 3 design principles. 
+It aims to follow Android design and development best practises.
+Offering a seamless and visually pleasing user experience, Vespera redefines the standards of modern app development.
 
-## Planned Features ⚗️
+# Planned Features ⚗️
 
-### 1. Summoner Profile
-- View detailed summoner information.
-- Track and analyze match history.
+### 1. User preferences
+- View the user's preferences.
+- Propose different app themes to choose from.
+- Font settings.
 
-### 2. Champion Insights
-- Access comprehensive details about champions.
-- Stay updated on the latest patches and changes.
+### 2. Intro screens
+- To setup the user informations
 
-### 3. Live Game Tracking
-- Monitor live games in real-time.
-- Receive notifications for important in-game events.
+# Architecture
 
-### 4. Build Recommendations
-- Get personalized item and rune suggestions.
-- Stay informed about popular builds.
+The **Vespera** app follows the
+[official architecture guidance](https://developer.android.com/topic/architecture).
 
-## Development Stack 📚
+# Modularization
 
-- The development will leverage Kotlin & Jetpack Compose for a modern and reactive UI.
+The **Vespera** app has been fully modularized.
 
-## Updates
+# Updates
 
-### Screenshots
+## Screenshots
 
 <img src="screenshots/login-screen.jpg" width=300/>
 
 ## How to Contribute
 
-We accept no contributions whatsoever.
+We accept no contributions whatsoever (for now).
 
-## Building and Running the App
+# Building and Running the App
 
 As the project is still in the planning stage, detailed instructions for building and running the app will be provided in future updates.
 
-## Contact
+# Contact
 
-Feel free to reach out if you have any questions or suggestions. We're looking forward to creating a fantastic League of Legends companion app together!
+Feel free to reach out if you have any questions or suggestions. We're looking forward to creating a fantastic modern app together!
 
 **Happy gaming!**
