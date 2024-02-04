@@ -15,3 +15,9 @@ annotation class HomeNavGraph(
     val start: Boolean = false
 )
 
+@MenuNavGraph(start = false)
+@NavGraph
+annotation class SettingsNavGraph(
+    val start: Boolean = false
+)
+

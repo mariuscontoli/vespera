@@ -9,6 +9,7 @@ import com.absurddevs.vespera.NavGraphs
 import com.absurddevs.vespera.R
 import com.absurddevs.vespera.core.designsystem.icon.VesperaIcons
 import com.absurddevs.vespera.destinations.HomeScreenDestination
+import com.absurddevs.vespera.destinations.SettingsScreenDestination
 import com.ramcosta.composedestinations.spec.DirectionDestinationSpec
 
 
@@ -32,13 +33,21 @@ sealed class TopLevelDestination(
         labelResId = R.string.destination_home
     )
 
+    data object SETTINGS: TopLevelDestination(
+        graph = NavGraphs.settings,
+        direction = SettingsScreenDestination,
+        selectedIcon = VesperaIcons.Settings,
+        unselectedIcon = VesperaIcons.SettingsBorder,
+        labelResId = R.string.destination_settings
+    )
+
     companion object {
         @OptIn(ExperimentalMaterial3AdaptiveNavigationSuiteApi::class)
         fun fromNavigationSuiteType(navigationSuiteType: NavigationSuiteType
         ): List<TopLevelDestination> {
             return when (navigationSuiteType) {
-                NavigationSuiteType.NavigationBar -> listOf(HOME)
-                else -> listOf(HOME)
+                NavigationSuiteType.NavigationBar -> listOf(HOME, SETTINGS)
+                else -> listOf(HOME, SETTINGS)
             }
         }
     }
