@@ -10,6 +10,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.adaptive.navigation.suite.ExperimentalMaterial3AdaptiveNavigationSuiteApi
+import androidx.compose.material3.adaptive.navigation.suite.NavigationSuiteItemColors
 import androidx.compose.material3.adaptive.navigation.suite.NavigationSuiteScaffold
 import androidx.compose.material3.adaptive.navigation.suite.NavigationSuiteType
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
@@ -23,6 +24,7 @@ import com.absurddevs.vespera.NavGraphs
 import com.absurddevs.vespera.appCurrentDestinationAsState
 import com.absurddevs.vespera.core.ui.DevicePosture
 import com.absurddevs.vespera.navigation.TopLevelDestination
+import com.absurddevs.vespera.navigation.VesperaNavigationSuiteDefaults
 import com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi
 import com.ramcosta.composedestinations.DestinationsNavHost
 import com.ramcosta.composedestinations.animations.defaults.RootNavGraphDefaultAnimations
@@ -65,6 +67,11 @@ fun MenuScreen(
             items.forEach { destination ->
                 val selected = appCurrentDestinationState in destination.graph.destinations
 
+                /**
+                 * For some reason, the [NavigationSuiteItemColors] argument classes
+                 * are not overridable, and the items colors of navigation bar are wrong.
+                 * Need to open an issue.
+                 */
                 item(
                     selected = selected,
                     onClick = {
@@ -82,20 +89,23 @@ fun MenuScreen(
 
                     },
                     label = {
-                        Text(text = stringResource(id = destination.labelResId),
+                        Text(
+                            text = stringResource(id = destination.labelResId),
                             style = MaterialTheme.typography.labelLarge
                         )
                     },
                     icon = {
                         Icon(
-                            imageVector = if (selected) destination.selectedIcon else destination.unselectedIcon,
+                            imageVector = if (selected) destination.selectedIcon
+                            else destination.unselectedIcon,
                             contentDescription = stringResource(id = destination.labelResId)
                         )
                     },
-                    alwaysShowLabel = true
+                    alwaysShowLabel = true,
                 )
             }
-        }
+        },
+        navigationSuiteColors = VesperaNavigationSuiteDefaults.colors()
     ) {
         val listState = rememberLazyListState()
 
