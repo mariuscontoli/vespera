@@ -5,35 +5,41 @@ androidGradlePlugin = "8.2.2"
 androidTools = "31.2.2"
 androidxActivity = "1.8.2"
 androidxAppCompat = "1.6.1"
-androidxComposeBom = "2024.01.00"
-androidxComposeCompiler = "1.5.7"
+androidxComposeBom = "2024.05.00"
+androidxComposeCompiler = "1.5.13"
+androidXComposeAnimations = "1.6.0"
+androidxComposeMaterial3Adaptive = "1.0.0-alpha12"
+androidxComposeMaterial3AdaptiveNavigation = "1.0.0-alpha12"
+androidxComposeMaterial3AdaptiveNavigationSuite = "1.0.0-alpha07"
 androidxCore = "1.12.0"
 androidxCoreSplashscreen = "1.0.1"
+androidxDatastore = "1.0.0"
 androidxHiltNavigationCompose = "1.1.0"
 androidxLifecycle = "2.7.0"
 androidxMacroBenchmark = "1.2.3"
 androidxMetrics = "1.0.0-beta01"
 androidxNavigation = "2.7.6"
+androidxWindow = "1.2.0"
 dependencyGuard = "0.4.3"
 hilt = "2.50"
-kotlin = "1.9.21"
+kotlin = "1.9.23"
 hiltExt = "1.1.0"
 kotlinxCoroutines = "1.7.3"
 kotlinxDatetime = "0.5.0"
 kotlinxSerializationJson = "1.6.0"
-ksp = "1.9.21-1.0.16"
+ksp = "1.9.23-1.0.20"
 junit = "4.13.2"
 runner = "1.0.2"
 espresso-core = "3.0.2"
 appcompat-v7 = "28.0.0"
 androidx-test-ext-junit = "1.1.5"
 androidx-test-espresso-espresso-core = "3.5.1"
-material = "1.11.0"
 kotlin1910 = "1.9.10"
 junit-junit = "4.13.2"
 androidx-test-ext-junit115 = "1.1.5"
 androidx-test-espresso-espresso-core351 = "3.5.1"
-com-google-android-material-material = "1.11.0"
+com-google-android-material-material = "1.12.0"
+compose-destinations = "1.9.63"
 
 [libraries]
 accompanist-permissions = { group = "com.google.accompanist", name = "accompanist-permissions", version.ref = "accompanist" }
@@ -44,8 +50,15 @@ androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "androidxComposeBom" }
 androidx-compose-foundation = { group = "androidx.compose.foundation", name = "foundation" }
 androidx-compose-foundation-layout = { group = "androidx.compose.foundation", name = "foundation-layout" }
+androidx-compose-animation-core = { group = "androidx.compose.animation", name = "animation-core", version.ref = "androidXComposeAnimations" }
+androidx-compose-animation = { group = "androidx.compose.animation", name = "animation", version.ref = "androidXComposeAnimations" }
 androidx-compose-material-iconsExtended = { group = "androidx.compose.material", name = "material-icons-extended" }
 androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3" }
+androidx-compose-material3-adaptive = { group = "androidx.compose.material3.adaptive", name = "adaptive", version.ref = "androidxComposeMaterial3Adaptive" }
+androidx-compose-material3-adaptive-layout = { group = "androidx.compose.material3.adaptive", name = "adaptive-layout", version.ref = "androidxComposeMaterial3Adaptive"}
+androidx-compose-material3-adaptive-android = { group = "androidx.compose.material3.adaptive", name = "adaptive-android", version.ref = "androidxComposeMaterial3Adaptive"}
+androidx-compose-material3-adaptive-navigation = { group = "androidx.compose.material3.adaptive", name = "adaptive-navigation", version.ref = "androidxComposeMaterial3AdaptiveNavigation" }
+androidx-compose-material3-adaptive-navigation-suite = { group = "androidx.compose.material3", name = "material3-adaptive-navigation-suite", version.ref = "androidxComposeMaterial3AdaptiveNavigationSuite" }
 androidx-compose-material3-windowSizeClass = { group = "androidx.compose.material3", name = "material3-window-size-class" }
 androidx-compose-runtime = { group = "androidx.compose.runtime", name = "runtime" }
 androidx-compose-ui-test = { group = "androidx.compose.ui", name = "ui-test-junit4" }
@@ -55,11 +68,16 @@ androidx-compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "u
 androidx-compose-ui-util = { group = "androidx.compose.ui", name = "ui-util" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "androidxCore" }
 androidx-core-splashscreen = { group = "androidx.core", name = "core-splashscreen", version.ref = "androidxCoreSplashscreen" }
+androidx-datastore = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "androidxDatastore" }
 androidx-hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "androidxHiltNavigationCompose" }
 androidx-lifecycle-runtimeCompose = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "androidxLifecycle" }
 androidx-lifecycle-viewModelCompose = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "androidxLifecycle" }
 androidx-metrics = { group = "androidx.metrics", name = "metrics-performance", version.ref = "androidxMetrics" }
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "androidxNavigation" }
+androidx-window = { group = "androidx.window", name = "window", version.ref = "androidxWindow" }
+
+compose-destinations-animations-core =  { group = "io.github.raamcosta.compose-destinations", name = "animations-core",version.ref = "compose-destinations" }
+compose-destinations-ksp =  { group = "io.github.raamcosta.compose-destinations", name = "ksp", version.ref = "compose-destinations" }
 
 hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
 hilt-android-testing = { group = "com.google.dagger", name = "hilt-android-testing", version.ref = "hilt" }

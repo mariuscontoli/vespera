@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import com.absurddevs.vespera.MainActivityUiState.Loading
 import com.absurddevs.vespera.MainActivityUiState.Success
+import com.absurddevs.vespera.core.designsystem.theme.ThemeBrand
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -20,8 +21,9 @@ enum class DarkThemeConfig {
     DARK
 }
 data class CustomData(
+    val themeBrand: ThemeBrand,
     val darkThemeConfig: DarkThemeConfig,
-    val useDynamicColor: Boolean,
+    val useAdaptiveLayout: Boolean
 )
 
 @HiltViewModel
@@ -29,7 +31,11 @@ class MainActivityViewModel @Inject constructor(
 
 ) : ViewModel() {
     private val data: Flow<CustomData> = flow {
-        emit(CustomData(DarkThemeConfig.FOLLOW_SYSTEM, true))
+        emit(CustomData(
+            themeBrand = ThemeBrand.DEFAULT,
+            darkThemeConfig = DarkThemeConfig.FOLLOW_SYSTEM,
+            useAdaptiveLayout = true
+        ))
     }
 
     val uiState: StateFlow<MainActivityUiState> = data.map {

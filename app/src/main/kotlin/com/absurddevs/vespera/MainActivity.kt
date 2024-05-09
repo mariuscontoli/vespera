@@ -7,24 +7,44 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
+import androidx.compose.foundation.layout.systemBars
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import com.absurddevs.vespera.MainActivityUiState.*
+import androidx.window.layout.FoldingFeature
+import androidx.window.layout.WindowInfoTracker
+import com.absurddevs.vespera.MainActivityUiState.Loading
+import com.absurddevs.vespera.MainActivityUiState.Success
+import com.absurddevs.vespera.core.designsystem.theme.ThemeBrand
 import com.absurddevs.vespera.core.designsystem.theme.VesperaTheme
-import com.absurddevs.vespera.ui.VesperaApp
+import com.absurddevs.vespera.core.ui.BetterInsets
+import com.absurddevs.vespera.core.ui.DevicePosture
+import com.absurddevs.vespera.core.ui.LocalBetterInsets
+import com.absurddevs.vespera.core.ui.isBookPosture
+import com.absurddevs.vespera.core.ui.isSeparating
+import com.absurddevs.vespera.ui.rememberVesperaAppState
+import com.ramcosta.composedestinations.DestinationsNavHost
+import com.ramcosta.composedestinations.navigation.dependency
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -55,6 +75,25 @@ class MainActivity : ComponentActivity() {
         }
         
         enableEdgeToEdge()
+
+        val devicePostureFlow = WindowInfoTracker.getOrCreate(this).windowLayoutInfo(this)
+            .flowWithLifecycle(this.lifecycle)
+            .map { layoutInfo ->
+                val foldingFeature =
+                    layoutInfo.displayFeatures.filterIsInstance<FoldingFeature>().firstOrNull()
+                when {
+                    isBookPosture(foldingFeature) ->
+                        DevicePosture.BookPosture(foldingFeature.bounds)
+                    isSeparating(foldingFeature) ->
+                        DevicePosture.Separating(foldingFeature.bounds, foldingFeature.orientation)
+                    else -> DevicePosture.NormalPosture
+                }
+            }
+            .stateIn(
+                scope = lifecycleScope,
+                started = SharingStarted.Eagerly,
+                initialValue = DevicePosture.NormalPosture
+            )
         
         setContent {
             val darkTheme = shouldUseDarkTheme(uiState)
@@ -73,12 +112,39 @@ class MainActivity : ComponentActivity() {
                 onDispose { }
             }
 
-            CompositionLocalProvider {
-                VesperaTheme(
-                    darkTheme = darkTheme,
-                    disableDynamicTheming = shouldDisableDynamicTheming(uiState)
+            // System Bars handling
+            val systemBarsPadding = WindowInsets.systemBars.asPaddingValues()
+            val betterInsets = remember {
+                BetterInsets(
+                    statusBarHeight = systemBarsPadding.calculateTopPadding(),
+                    navigationBarHeight = systemBarsPadding.calculateBottomPadding()
+                )
+            }
+
+            val windowSizeClass = calculateWindowSizeClass(activity = this)
+            val devicePosture = devicePostureFlow.collectAsState().value
+
+            val appState = rememberVesperaAppState(
+                defaultNavGraph = NavGraphs.home,
+                windowSizeClass = windowSizeClass
+            )
+
+            VesperaTheme {
+                CompositionLocalProvider(
+                    values = arrayOf(
+                        LocalBetterInsets provides betterInsets
+                    )
                 ) {
-                    VesperaApp(windowSizeClass = calculateWindowSizeClass(activity = this))
+                    DestinationsNavHost(
+                        navGraph = NavGraphs.root,
+                        engine = appState.navHostEngine,
+                        navController = appState.navController,
+                        dependenciesContainerBuilder = {
+                            dependency(appState.navigationSuiteType)
+                            dependency(appState.windowSizeClass)
+                            dependency(devicePosture)
+                        }
+                    )
                 }
             }
         }
@@ -93,17 +159,24 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-/**
- * Returns `true` if the dynamic color is disabled, as a function of the [uiState].
- */
 @Composable
-private fun shouldDisableDynamicTheming(
-    uiState: MainActivityUiState,
+private fun shouldUseAdaptiveLayout(
+    uiState: MainActivityUiState
 ): Boolean = when (uiState) {
     Loading -> false
-    is Success -> !uiState.data.useDynamicColor
+    is Success -> uiState.data.useAdaptiveLayout
 }
 
+@Composable
+private fun shouldUseAndroidTheme(
+    uiState: MainActivityUiState
+): Boolean = when (uiState) {
+    Loading -> false
+    is Success -> when (uiState.data.themeBrand) {
+        ThemeBrand.DEFAULT -> false
+        ThemeBrand.ANDROID -> true
+    }
+}
 
 /**
  * Returns `true` if dark theme should be used, as a function of the [uiState] and the
