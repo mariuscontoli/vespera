@@ -6,15 +6,17 @@ import androidx.compose.material3.adaptive.WindowAdaptiveInfo
 import androidx.compose.material3.adaptive.calculatePosture
 import androidx.compose.material3.adaptive.collectFoldingFeaturesAsState
 import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
-import androidx.compose.material3.adaptive.navigation.suite.ExperimentalMaterial3AdaptiveNavigationSuiteApi
-import androidx.compose.material3.adaptive.navigation.suite.NavigationSuiteScaffoldDefaults
-import androidx.compose.material3.adaptive.navigation.suite.NavigationSuiteType
+import androidx.compose.material3.adaptive.currentWindowSize
+import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScaffoldDefaults
+import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteType
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.unit.toSize
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.absurddevs.vespera.NavGraph
@@ -59,7 +61,6 @@ fun rememberVesperaAppState(
     }
 }
 
-@OptIn(ExperimentalMaterial3AdaptiveNavigationSuiteApi::class)
 @Stable
 class VesperaAppState(
     val navController: NavHostController,
@@ -76,7 +77,6 @@ class VesperaAppState(
      *
      * *Warning:* This doesn't support [NavigationSuiteType.NavigationDrawer] layout.
      */
-    @OptIn(ExperimentalMaterial3AdaptiveApi::class)
     val currentLayoutType: NavigationSuiteType
         @Composable get() {
             return NavigationSuiteScaffoldDefaults.calculateFromAdaptiveInfo(
@@ -93,8 +93,13 @@ class VesperaAppState(
     @OptIn(ExperimentalMaterial3AdaptiveApi::class)
     val navigationSuiteType: NavigationSuiteType
         @Composable get() {
+            val windowSize = with(LocalDensity.current) {
+                currentWindowSize().toSize().toDpSize()
+            }
             val adaptiveInfo = WindowAdaptiveInfo(
-                windowSizeClass = windowSizeClass,
+                windowSizeClass = androidx.window.core.layout.WindowSizeClass.compute(
+                    windowSize.width.value, windowSize.height.value
+                ),
                 windowPosture = calculatePosture(collectFoldingFeaturesAsState().value)
             )
 

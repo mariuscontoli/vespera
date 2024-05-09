@@ -9,10 +9,8 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.adaptive.navigation.suite.ExperimentalMaterial3AdaptiveNavigationSuiteApi
-import androidx.compose.material3.adaptive.navigation.suite.NavigationSuiteItemColors
-import androidx.compose.material3.adaptive.navigation.suite.NavigationSuiteScaffold
-import androidx.compose.material3.adaptive.navigation.suite.NavigationSuiteType
+import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScaffold
+import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteType
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -21,10 +19,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.absurddevs.vespera.NavGraphs
-import com.absurddevs.vespera.appCurrentDestinationAsState
 import com.absurddevs.vespera.core.ui.DevicePosture
 import com.absurddevs.vespera.navigation.TopLevelDestination
-import com.absurddevs.vespera.navigation.VesperaNavigationSuiteDefaults
 import com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi
 import com.ramcosta.composedestinations.DestinationsNavHost
 import com.ramcosta.composedestinations.animations.defaults.RootNavGraphDefaultAnimations
@@ -33,9 +29,10 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootNavGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.navigation.dependency
+import com.ramcosta.composedestinations.utils.currentDestinationAsState
 
-@OptIn(ExperimentalMaterial3AdaptiveNavigationSuiteApi::class,
-    ExperimentalMaterialNavigationApi::class, ExperimentalAnimationApi::class
+@OptIn(ExperimentalMaterialNavigationApi::class,
+    ExperimentalAnimationApi::class
 )
 @Destination
 @RootNavGraph(start = true)
@@ -58,7 +55,7 @@ fun MenuScreen(
         defaultAnimationsForNestedNavGraph = emptyMap()
     )
 
-    val appCurrentDestinationState by navigationController.appCurrentDestinationAsState()
+    val appCurrentDestinationState by navigationController.currentDestinationAsState()
 
     NavigationSuiteScaffold(
         layoutType = navigationSuiteType,
@@ -105,7 +102,7 @@ fun MenuScreen(
                 )
             }
         },
-        navigationSuiteColors = VesperaNavigationSuiteDefaults.colors()
+//        navigationSuiteColors = VesperaNavigationSuiteDefaults.colors()
     ) {
         val listState = rememberLazyListState()
 

@@ -211,7 +211,6 @@ fun VesperaTheme(
     // Color scheme
     val colorScheme = when {
         enableDynamicTheming -> {
-            val context = LocalContext.current
             if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
         }
 

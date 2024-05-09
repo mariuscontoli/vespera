@@ -10,36 +10,31 @@ import androidx.compose.material3.DrawerDefaults
 import androidx.compose.material3.NavigationBarDefaults
 import androidx.compose.material3.NavigationBarItemColors
 import androidx.compose.material3.NavigationRailDefaults
-import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
 import androidx.compose.material3.adaptive.WindowAdaptiveInfo
-import androidx.compose.material3.adaptive.navigation.suite.ExperimentalMaterial3AdaptiveNavigationSuiteApi
-import androidx.compose.material3.adaptive.navigation.suite.NavigationSuiteColors
-import androidx.compose.material3.adaptive.navigation.suite.NavigationSuiteDefaults
-import androidx.compose.material3.adaptive.navigation.suite.NavigationSuiteType
+import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteColors
+import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteDefaults
+import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteType
 import androidx.compose.material3.contentColorFor
-import androidx.compose.material3.windowsizeclass.WindowHeightSizeClass.Companion.Compact
-import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass.Companion.Expanded
-import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass.Companion.Medium
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
+import androidx.window.core.layout.WindowHeightSizeClass
+import androidx.window.core.layout.WindowWidthSizeClass
 import com.ramcosta.composedestinations.DestinationsNavHost
 import com.ramcosta.composedestinations.animations.defaults.NavGraphDefaultAnimationParams
 import com.ramcosta.composedestinations.animations.defaults.NestedNavGraphDefaultAnimations
 import com.ramcosta.composedestinations.animations.defaults.RootNavGraphDefaultAnimations
 
-@OptIn(ExperimentalMaterial3AdaptiveNavigationSuiteApi::class)
 object VesperaNavigationSuiteDefaults {
 
-    @OptIn(ExperimentalMaterial3AdaptiveApi::class)
     fun calculateFromAdaptiveInfo(
         adaptiveInfo: WindowAdaptiveInfo
     ): NavigationSuiteType {
         return with(adaptiveInfo) {
-            if (windowPosture.isTabletop || (windowSizeClass.heightSizeClass == Compact)) {
+            if (windowPosture.isTabletop || (windowSizeClass.windowHeightSizeClass == WindowHeightSizeClass.COMPACT)) {
                 NavigationSuiteType.NavigationBar
-            } else if (windowSizeClass.widthSizeClass == Medium) {
+            } else if (windowSizeClass.windowWidthSizeClass == WindowWidthSizeClass.MEDIUM) {
                 NavigationSuiteType.NavigationRail
-            } else if (windowSizeClass.widthSizeClass == Expanded) {
+            } else if (windowSizeClass.windowWidthSizeClass == WindowWidthSizeClass.EXPANDED) {
                 NavigationSuiteType.NavigationDrawer
             } else {
                 NavigationSuiteType.NavigationBar

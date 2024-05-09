@@ -26,7 +26,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
@@ -62,7 +61,6 @@ fun HomeScreen(
 
             Scaffold(
                 modifier = modifier
-                    .shadow(8.dp)
                     .zIndex(1f)
                     .nestedScroll(
                         if (windowSize.widthSizeClass == WindowWidthSizeClass.Compact)

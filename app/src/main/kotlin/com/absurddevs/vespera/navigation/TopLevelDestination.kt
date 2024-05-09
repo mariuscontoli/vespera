@@ -1,8 +1,7 @@
 package com.absurddevs.vespera.navigation
 
 import androidx.annotation.StringRes
-import androidx.compose.material3.adaptive.navigation.suite.ExperimentalMaterial3AdaptiveNavigationSuiteApi
-import androidx.compose.material3.adaptive.navigation.suite.NavigationSuiteType
+import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteType
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.absurddevs.vespera.NavGraph
 import com.absurddevs.vespera.NavGraphs
@@ -42,7 +41,6 @@ sealed class TopLevelDestination(
     )
 
     companion object {
-        @OptIn(ExperimentalMaterial3AdaptiveNavigationSuiteApi::class)
         fun fromNavigationSuiteType(navigationSuiteType: NavigationSuiteType
         ): List<TopLevelDestination> {
             return when (navigationSuiteType) {
